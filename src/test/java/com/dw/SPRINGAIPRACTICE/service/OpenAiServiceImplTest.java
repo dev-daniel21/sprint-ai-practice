@@ -15,7 +15,21 @@ class OpenAiServiceImplTest {
     @Test
     void getAnswer() {
         String answer = openAiService.getAnswer("Tell a knock-knock joke");
-        System.out.println("Answer received");
+        System.out.println("Answer received:\n");
+        System.out.println(answer);
+    }
+
+    @Test
+    void getAnswerForPythonScript() {
+        String answer = openAiService.getAnswer("Write a python code to output numbers form 1 to 1000");
+        System.out.println("Answer received:\n");
+        System.out.println(answer);
+    }
+
+    @Test
+    void getAnswerForSnakeGame() {
+        String answer = openAiService.getAnswer("Write a python code to create a snake game");
+        System.out.println("Answer received:\n");
         System.out.println(answer);
     }
 }
