@@ -7,11 +7,17 @@ import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 
 @Service
 public class OpenAiServiceImpl implements OpenAIService {
+
+    @Value("classpath:templates/get-starwars.st")
+    private Resource getStarWars;
 
     private final ChatClient chatClient;
 
@@ -41,10 +47,10 @@ public class OpenAiServiceImpl implements OpenAIService {
 
     @Override
     public Answer getStarWars(StarWarsRequestModel starWarsRequest) {
-        System.out.println("new Star Wars question received");
-        PromptTemplate promptTemplate = new PromptTemplate(String.format("Which part of Star Wars franchise is the movie called %s ?",
-                starWarsRequest.movieName()));
-        Prompt prompt = promptTemplate.create();
+        System.out.println("##\nNew Star Wars question received:");
+        PromptTemplate promptTemplate = new PromptTemplate(getStarWars);
+        Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName()));
+        System.out.println(prompt.getContents() + "\n##");
         ChatResponse response = chatClient.call(prompt);
 
         return new Answer(response.getResult().getOutput().getContent());
