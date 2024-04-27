@@ -19,6 +19,9 @@ public class OpenAiServiceImpl implements OpenAIService {
     @Value("classpath:templates/get-starwars.st")
     private Resource getStarWars;
 
+    @Value("classpath:templates/get-starwars-with-info.st")
+    private Resource getStarWarsWithInfo;
+
     private final ChatClient chatClient;
 
     public OpenAiServiceImpl(ChatClient chatClient) {
@@ -49,6 +52,17 @@ public class OpenAiServiceImpl implements OpenAIService {
     public Answer getStarWars(StarWarsRequestModel starWarsRequest) {
         System.out.println("##\nNew Star Wars question received:");
         PromptTemplate promptTemplate = new PromptTemplate(getStarWars);
+        Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName()));
+        System.out.println(prompt.getContents() + "\n##");
+        ChatResponse response = chatClient.call(prompt);
+
+        return new Answer(response.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public Answer getStarWarsWithInfo(StarWarsRequestModel starWarsRequest) {
+        System.out.println("##\nNew Star Wars question received:");
+        PromptTemplate promptTemplate = new PromptTemplate(getStarWarsWithInfo);
         Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName()));
         System.out.println(prompt.getContents() + "\n##");
         ChatResponse response = chatClient.call(prompt);

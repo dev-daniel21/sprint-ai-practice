@@ -11,4 +11,6 @@ public interface OpenAIService {
     Answer getAnswer(Question question);
 
     Answer getStarWars(StarWarsRequestModel starWarsRequest);
+
+    Answer getStarWarsWithInfo(StarWarsRequestModel starWarsRequestModel);
 }

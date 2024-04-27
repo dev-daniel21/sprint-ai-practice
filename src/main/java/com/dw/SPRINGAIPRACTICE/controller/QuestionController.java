@@ -25,9 +25,15 @@ class QuestionController {
     }
 
     @PostMapping("/getStarWars")
-    public Answer getAnswer(@RequestBody StarWarsRequestModel starWarsRequestModel) {
+    public Answer getStarWars(@RequestBody StarWarsRequestModel starWarsRequestModel) {
 
         return openAIService.getStarWars(starWarsRequestModel);
+    }
+
+    @PostMapping("/getStarWarsWithInfo")
+    public Answer getStarwarsWithInfo(@RequestBody StarWarsRequestModel starWarsRequestModel) {
+
+        return openAIService.getStarWarsWithInfo(starWarsRequestModel);
     }
 
 }
