@@ -12,5 +12,7 @@ public interface OpenAIService {
 
     Answer getStarWars(StarWarsRequestModel starWarsRequest);
 
+    Answer getStarWarsDirector(StarWarsRequestModel starWarsRequest);
+
     Answer getStarWarsWithInfo(StarWarsRequestModel starWarsRequestModel);
 }

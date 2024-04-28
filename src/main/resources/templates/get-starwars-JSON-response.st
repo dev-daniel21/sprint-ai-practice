@@ -1,0 +1,1 @@
+Who was the director of movie called {movieName} in the Star Wars franchise? Response should be in JSON format in field `director`.
