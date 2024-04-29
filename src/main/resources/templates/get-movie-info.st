@@ -1,0 +1,1 @@
+Return information about movie {movieName}. {format}

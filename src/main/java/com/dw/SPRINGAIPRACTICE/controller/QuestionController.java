@@ -45,4 +45,11 @@ class QuestionController {
 
         return openAIService.getStartrekJSONFormat(request);
     }
+
+
+    @PostMapping("/getMovieInfo")
+    public GeneralInfoResponse getMovieInfo(@RequestBody GeneralInfoRequest request) {
+
+        return openAIService.getMovieInfo(request);
+    }
 }

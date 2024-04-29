@@ -31,6 +31,9 @@ public class OpenAiServiceImpl implements OpenAIService {
     @Value("classpath:templates/get-JSON-format.st")
     private Resource getJSONFormat;
 
+    @Value("classpath:templates/get-movie-info.st")
+    private Resource getMovieInfo;
+
     private final ChatClient chatClient;
 
     @Autowired
@@ -124,6 +127,19 @@ public class OpenAiServiceImpl implements OpenAIService {
         ChatResponse response = chatClient.call(prompt);
 
         System.out.println(response.getResult().getOutput().getContent());
+
+        return parser.parse(response.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public GeneralInfoResponse getMovieInfo(GeneralInfoRequest request) {
+        BeanOutputParser<GeneralInfoResponse> parser = new BeanOutputParser<>(GeneralInfoResponse.class);
+        String format = parser.getFormat();
+
+        PromptTemplate promptTemplate = new PromptTemplate(getMovieInfo);
+        Prompt prompt = promptTemplate.create(Map.of("movieName", request.movieName(), "format", format));
+
+        ChatResponse response = chatClient.call(prompt);
 
         return parser.parse(response.getResult().getOutput().getContent());
     }

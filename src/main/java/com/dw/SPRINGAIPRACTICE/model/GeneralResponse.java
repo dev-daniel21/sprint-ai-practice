@@ -1,4 +1,6 @@
 package com.dw.SPRINGAIPRACTICE.model;
 
-public record GeneralResponse(String response) {
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+public record GeneralResponse(@JsonPropertyDescription("Director property:") String response) {
 }

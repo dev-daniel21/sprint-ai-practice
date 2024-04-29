@@ -17,4 +17,5 @@ public interface OpenAIService {
 
     GeneralResponse getStartrekJSONFormat(StarTrekRequest starWarsRequest);
 
+    GeneralInfoResponse getMovieInfo(GeneralInfoRequest request);
 }
