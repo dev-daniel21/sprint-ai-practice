@@ -1,18 +1,20 @@
 package com.dw.SPRINGAIPRACTICE.service;
 
-import com.dw.SPRINGAIPRACTICE.model.Answer;
-import com.dw.SPRINGAIPRACTICE.model.Question;
-import com.dw.SPRINGAIPRACTICE.model.StarWarsRequestModel;
+import com.dw.SPRINGAIPRACTICE.model.*;
 
 public interface OpenAIService {
 
+    //    TESTS only
     String getAnswer(String question);
 
     Answer getAnswer(Question question);
 
     Answer getStarWars(StarWarsRequestModel starWarsRequest);
 
-    Answer getStarWarsDirector(StarWarsRequestModel starWarsRequest);
+    GeneralResponse getStarWarsDirector(StarWarsRequestModel starWarsRequest);
 
-    Answer getStarWarsWithInfo(StarWarsRequestModel starWarsRequestModel);
+    Answer getStarWarsWithInfo(StarTrekRequest starWarsRequest);
+
+    GeneralResponse getStartrekJSONFormat(StarTrekRequest starWarsRequest);
+
 }

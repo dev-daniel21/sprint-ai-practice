@@ -1,0 +1,1 @@
+Who was the director of movie called {movieName} in the Star Trek franchise? {format}

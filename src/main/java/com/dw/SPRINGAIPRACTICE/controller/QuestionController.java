@@ -1,8 +1,6 @@
 package com.dw.SPRINGAIPRACTICE.controller;
 
-import com.dw.SPRINGAIPRACTICE.model.Answer;
-import com.dw.SPRINGAIPRACTICE.model.Question;
-import com.dw.SPRINGAIPRACTICE.model.StarWarsRequestModel;
+import com.dw.SPRINGAIPRACTICE.model.*;
 import com.dw.SPRINGAIPRACTICE.service.OpenAIService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,15 +29,20 @@ class QuestionController {
     }
 
     @PostMapping("/getStarWarsDirector")
-    public Answer getStarWarsDirector(@RequestBody StarWarsRequestModel starWarsRequestModel) {
+    public GeneralResponse getStarWarsDirector(@RequestBody StarWarsRequestModel starWarsRequestModel) {
 
         return openAIService.getStarWarsDirector(starWarsRequestModel);
     }
 
     @PostMapping("/getStarWarsWithInfo")
-    public Answer getStarwarsWithInfo(@RequestBody StarWarsRequestModel starWarsRequestModel) {
+    public Answer getStarwarsWithInfo(@RequestBody StarTrekRequest starWarsRequestModel) {
 
         return openAIService.getStarWarsWithInfo(starWarsRequestModel);
     }
 
+    @PostMapping("/getStarWarsJson")
+    public GeneralResponse getStarwarsJSON(@RequestBody StarTrekRequest request) {
+
+        return openAIService.getStartrekJSONFormat(request);
+    }
 }

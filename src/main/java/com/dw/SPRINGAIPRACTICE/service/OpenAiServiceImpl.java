@@ -1,16 +1,14 @@
 package com.dw.SPRINGAIPRACTICE.service;
 
-import com.dw.SPRINGAIPRACTICE.model.Answer;
-import com.dw.SPRINGAIPRACTICE.model.Question;
-import com.dw.SPRINGAIPRACTICE.model.StarWarsRequestModel;
+import com.dw.SPRINGAIPRACTICE.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.parser.BeanOutputParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -30,6 +28,9 @@ public class OpenAiServiceImpl implements OpenAIService {
     @Value("classpath:templates/get-starwars-with-info.st")
     private Resource getStarWarsWithInfo;
 
+    @Value("classpath:templates/get-JSON-format.st")
+    private Resource getJSONFormat;
+
     private final ChatClient chatClient;
 
     @Autowired
@@ -39,6 +40,7 @@ public class OpenAiServiceImpl implements OpenAIService {
         this.chatClient = chatClient;
     }
 
+//  TESTS only
     @Override
     public String getAnswer(String question) {
         PromptTemplate promptTemplate = new PromptTemplate(question);
@@ -73,7 +75,7 @@ public class OpenAiServiceImpl implements OpenAIService {
     }
 
     @Override
-    public Answer getStarWarsDirector(StarWarsRequestModel starWarsRequest) {
+    public GeneralResponse getStarWarsDirector(StarWarsRequestModel starWarsRequest) {
         System.out.println("##\nNew Star Wars question received:");
         PromptTemplate promptTemplate = new PromptTemplate(getStarWarsDirector);
         Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName()));
@@ -87,16 +89,16 @@ public class OpenAiServiceImpl implements OpenAIService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        Answer result = new Answer(responseString);
+        GeneralResponse result = new GeneralResponse(responseString);
 
         System.out.println(response.getResult().getOutput().getContent());
         System.out.println(responseString);
-        System.out.println(result.answer());
+        System.out.println(result.response());
         return result;
     }
 
     @Override
-    public Answer getStarWarsWithInfo(StarWarsRequestModel starWarsRequest) {
+    public Answer getStarWarsWithInfo(StarTrekRequest starWarsRequest) {
         System.out.println("##\nNew Star Wars question received:");
         PromptTemplate promptTemplate = new PromptTemplate(getStarWarsWithInfo);
         Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName()));
@@ -104,5 +106,25 @@ public class OpenAiServiceImpl implements OpenAIService {
         ChatResponse response = chatClient.call(prompt);
 
         return new Answer(response.getResult().getOutput().getContent());
+    }
+
+    @Override
+    public GeneralResponse getStartrekJSONFormat(StarTrekRequest starWarsRequest) {
+        BeanOutputParser<GeneralResponse> parser = new BeanOutputParser<>(GeneralResponse.class);
+        String format = parser.getFormat();
+        System.out.printf("Parser format: %s%n", format);
+
+        System.out.println("##\nNew Star Trek question received:");
+
+        PromptTemplate promptTemplate = new PromptTemplate(getJSONFormat);
+        Prompt prompt = promptTemplate.create(Map.of("movieName", starWarsRequest.movieName(), "format", format));
+
+        System.out.println(prompt.getContents() + "\n##");
+
+        ChatResponse response = chatClient.call(prompt);
+
+        System.out.println(response.getResult().getOutput().getContent());
+
+        return parser.parse(response.getResult().getOutput().getContent());
     }
 }
